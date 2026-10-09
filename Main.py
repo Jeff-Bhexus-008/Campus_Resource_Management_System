@@ -1,57 +1,55 @@
-from inventory import add_resource, list_resources, search_resources, filter_category
-from borrowing import borrow_resource, return_resource
-from reports import report
+from inventory import *
+from borrowing import *
+from reports import *
 
 
-resources = [
-  {"id": "R001", "name": "Laptop", "category": "Electronics", "total": 10, "available": 10},
-  {"id": "R002", "name": "Keyboard", "category": "Accessories", "total": 5, "available": 5},
-  {"id": "R003", "name": "Headset", "category": "Accessories", "total": 3, "available": 3}
-]
-fellows = {
-    "F001": "Ada", 
-    "F002": "John", 
-    "F003": "Grace"
-}
-borrow_records = []
+def show(items):
+    for r in items:
+        print(r)
+
 
 while True:
-    print("\n--- CAMPUS RESOURCE MANAGEMENT SYSTEM ---")
-    print("1. Add Resource")
-    print("2. List Resources")
-    print("3. Borrow Resource")
-    print("4. Return Resource")
-    print("5. Search Resource")
-    print("6. Filter by Category")
-    print("7. Generate Report")
-    print("8. Exit")
-
-    choice = input("Choose an option: ")
+    print("\n1.List  2.Add  3.Search  4.Category  5.Borrow  6.Return  7.Records  8.Report  9.Exit")
+    choice = input("Choose: ")
 
     if choice == "1":
-        add_resource(resources)
+        show(list_resources())
 
     elif choice == "2":
-        list_resources(resources)
+        name = input("Name: ")
+        category = input("Category: ")
+        quantity = int(input("Quantity: "))
+        print(add_resource(name, category, quantity))
 
     elif choice == "3":
-        borrow_resource(resources, fellows, borrow_records)
+        show(search_resources(input("Search: ")))
 
     elif choice == "4":
-        return_resource(resources, fellows, borrow_records)
+        show(filter_category(input("Category: ")))
 
     elif choice == "5":
-        search_resources(resources)
+        name = input("Resource: ")
+        fellow = input("Fellow: ")
+        quantity = int(input("Quantity: "))
+        print(borrow_resource(name, fellow, quantity))
 
     elif choice == "6":
-        filter_category(resources)
+        name = input("Resource: ")
+        fellow = input("Fellow: ")
+        quantity = int(input("Quantity: "))
+        print(return_resource(name, fellow, quantity))
 
     elif choice == "7":
-        report(resources)
+        show(list_borrow_records())
 
     elif choice == "8":
+        print(generate_report())
+        print("Low stock:", low_stock_resources())
+        print("Most borrowed:", most_borrowed_resource())
+
+    elif choice == "9":
         print("Goodbye!")
         break
 
     else:
-        print("Invalid choice. Choose 1-8.")
+        print("Invalid choice.")

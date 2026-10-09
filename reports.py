@@ -1,36 +1,41 @@
-def report(resources):
-    total = 0
-    available = 0
+from inventory import resources
+
+
+def generate_report():
+    total_resources = 0
+    total_available = 0
+    total_borrowed = 0
 
     for resource in resources:
-        total += resource["total"]
-        available += resource["available"]
+        total_resources += resource["total"]
+        total_available += resource["available"]
+        total_borrowed += resource["borrowed"]
 
-    borrowed = total - available
+    return {
+        "total": total_resources,
+        "available": total_available,
+        "borrowed": total_borrowed
+    }
 
-    print("\n--- REPORT ---")
-    print("Total units:", total)
-    print("Available units:", available)
-    print("Borrowed units:", borrowed)
 
-    print("\nLow stock:")
-
-    for resource in resources:
-        if resource["available"] < 3:
-            print(resource["name"], "-", resource["available"])
-
-    highest = 0
+def low_stock_resources(threshold=1):
+    results = []
 
     for resource in resources:
-        borrowed_units = resource["total"] - resource["available"]
+        if resource["available"] <= threshold:
+            results.append(resource)
 
-        if borrowed_units > highest:
-            highest = borrowed_units
+    return results
 
-    print("\nMost borrowed:")
+
+def most_borrowed_resource():
+    if not resources:
+        return None
+
+    most_borrowed = resources[0]
 
     for resource in resources:
-        borrowed_units = resource["total"] - resource["available"]
+        if resource["borrowed"] > most_borrowed["borrowed"]:
+            most_borrowed = resource
 
-        if borrowed_units == highest and highest > 0:
-            print(resource["name"], "-", borrowed_units)
+    return most_borrowed
